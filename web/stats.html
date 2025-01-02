@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="stats.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Stats</title>
+  <link rel="icon" type="image/png" href="../assets/icons/beanie-icon.png" />
+  <style>
+    body {
+      font-family: 'Lucida Bright', Georgia, serif;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Beanie Clock</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item" id="nav-panel">
+          <a class="nav-link" href="options.html">Options</a>
+        </li>
+        <li class="nav-item" id="nav-stats">
+          <a class="nav-link" href="stats.html">Stats</a>
+        </li>
+        <li class="nav-item" id="nav-settings">
+          <a class="nav-link" href="credits.html">Credits</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container my-5">
+    <h1 class="text-center">Stats</h1>
+    <hr />
+    <img src="../assets/images/aurora.jpg" alt="Centered Image" class="centered-image">
+
+    <div class="block text-center mt-4">
+      Warning! All of your settings will be lost if you uninstall this extension!
+    </div>
+
+    <h3 class="text-center mt-5">Session Summary</h3>
+    <div class="session-summary mt-4">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td>Work Sessions Today</td>
+            <td id="work-session-count">0</td>
+          </tr>
+          <tr>
+            <td>Short Rest Sessions Today</td>
+            <td id="short-rest-session-count">0</td>
+          </tr>
+          <tr>
+            <td>Long Rest Sessions Today</td>
+            <td id="long-rest-session-count">0</td>
+          </tr>
+          <tr>
+            <td>Total Work Time</td>
+            <td id="total-work-time">0h 0m</td>
+          </tr>
+          <tr>
+            <td>Total Break Time</td>
+            <td id="total-break-time">0h 0m</td>
+          </tr>
+          <tr>
+            <td>Longest Work Streak</td>
+            <td id="longest-work-streak">0</td>
+          </tr>
+          <tr>
+            <td>Pomodoros Completed Today</td>
+            <td id="pomodoros-completed-today">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-center mt-5">Pomodoro Chart</h3>
+    <div class="chart-container mt-4">
+      <canvas id="pomodoro-chart"></canvas>
+    </div>
+
+    <div class="form-group mt-4">
+      <label for="date-picker">Select Date:</label>
+      <input type="date" id="date-picker" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="time-range">Select Time Range:</label>
+      <select id="time-range" class="form-control">
+        <option value="7">Last 7 Days</option>
+        <option value="30">Last 30 Days</option>
+      </select>
+    </div>
+  </div>
+
+  <script src="chart.js"></script>
+  <script src="stats.js"></script>
+</body>
+
+</html>

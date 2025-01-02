@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="options.css">
+  <link rel="icon" type="image/png" href="../assets/icons/beanie-icon.png" />
+  <title>Options</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Beanie Clock</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item" id="nav-panel">
+          <a class="nav-link" href="options.html">Options</a>
+        </li>
+        <li class="nav-item" id="nav-stats">
+          <a class="nav-link" href="stats.html">Stats</a>
+        </li>
+        <li class="nav-item" id="nav-settings">
+          <a class="nav-link" href="credits.html">Credits</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container my-5">
+    <h1 class="text-center">Options</h1>
+    <hr />
+    <img src="../assets/images/cyprus.jpg" alt="Centered Image" class="centered-image">
+  </div>
+
+  <div class="container my-5">
+    <form id="options-form" class="mx-auto">
+      <div class="form-group">
+        <label for="work-time" class="control-label">
+          Work Session Time (minutes)
+        </label>
+        <input type="number" class="form-control" id="work-time" min="1" max="99" step="1" required />
+      </div>
+      <div class="form-group">
+        <label for="short-rest-time" class="control-label">
+          Short Rest Session Time (minutes)
+        </label>
+        <input type="number" class="form-control" id="short-rest-time" min="1" max="99" step="1" required />
+      </div>
+      <div class="form-group">
+        <label for="long-rest-time" class="control-label">
+          Long Rest Session Time (minutes)
+        </label>
+        <input type="number" class="form-control" id="long-rest-time" min="1" max="99" step="1" required />
+      </div>
+
+      <div class="form-group">
+        <label for="session-count" class="control-label">
+          Take a Long Break:
+        </label>
+        <select class="form-control" id="session-count">
+          <option value="0">never</option>
+          <option value="1">every break</option>
+          <option value="2">every 2nd break</option>
+          <option value="3">every 3rd break</option>
+          <option value="4">every 4th break</option>
+          <option value="5">every 5th break</option>
+          <option value="6">every 6th break</option>
+          <option value="7">every 7th break</option>
+          <option value="8">every 8th break</option>
+          <option value="9">every 9th break</option>
+          <option value="10">every 10th break</option>
+        </select>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" id="notification-sound-checkbox" />
+          Notification Sound
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" id="toolbar-badge-checkbox" />
+          Toolbar Minute Display
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" id="start-automatically-checkbox" />
+          Start Automatically?
+        </label>
+      </div>
+
+
+      <button type="submit" class="btn btn-primary">Save</button>
+      <hr />
+
+      <div>
+        <button class="btn btn-xs btn-warning" id="reset-options">
+          Reset to Default
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+
+</html>

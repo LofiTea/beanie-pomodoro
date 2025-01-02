@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Lucida Bright', Georgia, serif;
+}
+
+.container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.centered-image {
+    width: 400px;
+    height: 400px;
+    margin-top: 10px;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.outlined-button {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    border: 2px solid black;
+    background-color: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.outlined-button:active {
+    transform: scale(1.1);
+}
+
+.button-icon {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
+
+.outlined-button:hover {
+    color: white;
+}

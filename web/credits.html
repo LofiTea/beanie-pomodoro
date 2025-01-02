@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="../assets/icons/beanie-icon.png" />
+    <title>Credits</title>
+    <style>
+        body {
+            font-family: 'Lucida Bright', Georgia, serif;
+        }
+
+        .navbar-nav .nav-item .nav-link.active {
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .centered-image {
+            width: 250px;
+            height: 250px;
+            margin-top: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .credits-container {
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .credits-container .role {
+            font-weight: bold;
+        }
+
+        .credits-container .name {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Beanie Clock</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item" id="nav-panel">
+                    <a class="nav-link" href="options.html">Options</a>
+                </li>
+                <li class="nav-item" id="nav-stats">
+                    <a class="nav-link" href="stats.html">Stats</a>
+                </li>
+                <li class="nav-item" id="nav-settings">
+                    <a class="nav-link" href="credits.html">Credits</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h1 class="text-center">Credits</h1>
+        <hr>
+        <img src="../assets/images/harmon.jpg" alt="Centered Image" class="centered-image">
+        <p class = "text-center">If there is a bug or if you have a suggestion, feel free to send an email <a
+                href="mailto:iwilldiscoveraurora@gmail.com">here!</a></p>
+
+        <div class="credits-container">
+            <div class="role">Art</div>
+            <div class="name">LofiTea</div>
+            <div class="role">Program</div>
+            <div class="name">LofiTea</div>
+            <div class="role">Layout</div>
+            <div class="name">LofiTea</div>
+        </div>
+    </div>
+</body>
+
+</html>

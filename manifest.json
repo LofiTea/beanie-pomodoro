@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "Beanie Clock",
+  "version": "1.0.0",
+  "description": "A simple Pomodoro timer that cycles through work sessions, short breaks, and long breaks.",
+  "icons": {
+    "48": "/assets/icons/beanie-icon.png"
+  },
+  "browser_action": {
+    "default_popup": "/session/session-work.html",
+    "default_icon": "/assets/icons/beanie-icon.png"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "web_accessible_resources": [
+    "/web/options.html",
+    "/web/stats.html",
+    "/web/credits.html",
+    "/assets/images/*",
+    "/assets/icons/*"
+  ]
+}
