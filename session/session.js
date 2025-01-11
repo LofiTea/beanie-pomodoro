@@ -4,6 +4,10 @@ browser.runtime.onMessage.addListener((message) => {
     const seconds = message.timeRemaining % 60;
     document.getElementById("timer").textContent = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   }
+
+  if (message.action === "clearTimerText") {
+    document.getElementById("timer").textContent = '';
+  }
 });
 
 document.getElementById("resume").addEventListener("click", () => {

@@ -10,6 +10,7 @@
  * (c) 2024 Chart.js Contributors
  * Released under the MIT License
  */
+
 !(function (t, e) {
   "object" == typeof exports && "undefined" != typeof module
     ? (module.exports = e())
