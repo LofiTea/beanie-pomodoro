@@ -51,9 +51,9 @@ function loadSettings() {
 */
 
 function loadSettings() {
-  workTime = 0.05 * 60;
-  shortRestTime = 0.05 * 60;
-  longRestTime = 0.01 * 60;
+  workTime = (1 / 6) * 60;
+  shortRestTime = (1 / 6) * 60;
+  longRestTime = 0.25 * 60;
   notificationSoundEnabled = JSON.parse(localStorage.getItem("notificationSound")) || false;
   sessionCount = 0;
   timeRemaining = workTime;
@@ -67,6 +67,7 @@ function loadSettings() {
   shortRestsRemaining = sessionCountSetting;
 }
 
+// Function that starts the timer
 function startTimer() {
   if (!timer) {
     timer = setInterval(() => {
@@ -88,6 +89,7 @@ function startTimer() {
   }
 }
 
+// Function that marks how many sessions have been completed
 function sessionCompleted() {
   if (currentSession === "work") {
     sessionCount++;
@@ -125,14 +127,14 @@ function sessionCompleted() {
       totalBreakTime += shortRestTime;
       openNewTab("../page/page-work.html");
     } else if (currentSession === "longBreak") {
-      totalBreakTime += longRestDuration;
+      totalBreakTime += longRestTime;
       openNewTab("../page/page-work-long-rest.html");
     }
 
     switchPopup("../session/session-work.html");
     currentSession = "work";
     timeRemaining = workTime;
-    localStorage.setItem("pomodorosCompleted", pomodorosCompleted);
+    localStorage.setItem("pomodorosCompletedToday", pomodorosCompletedToday);
   }
   saveDailyStats();
 }
@@ -156,40 +158,13 @@ function resetTimer() {
 }
 
 // Function to stop the timer
-function stopTimer() {
+function pauseTimer() {
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  }
   updateBadgeText(timeRemaining);
   browser.runtime.sendMessage({ action: "updateTimer", timeRemaining: timeRemaining });
-}
-
-// REVIEW: Function that should techically save the statistics
-function saveDailyStats() {
-  const today = getTodayDateString();
-  const statsByDate = JSON.parse(localStorage.getItem("statsByDate")) || {};
-
-  if (!statsByDate[today]) {
-    statsByDate[today] = {
-      workSessionsCompleted: 0,
-      shortRestsCompleted: 0,
-      longRestsCompleted: 0,
-      pomodorosCompleted: 0,
-      totalWorkTime: 0,
-      totalBreakTime: 0,
-      longestWorkStreak: 0,
-    };
-  }
-
-  statsByDate[today].workSessionsCompleted = workSessionsCompleted;
-  statsByDate[today].shortRestsCompleted = shortRestsCompleted;
-  statsByDate[today].longRestsCompleted = longRestsCompleted;
-  statsByDate[today].totalWorkTime = totalWorkTime;
-  statsByDate[today].totalBreakTime = totalBreakTime;
-  statsByDate[today].longestWorkStreak = longestWorkStreak;
-
-  localStorage.setItem("statsByDate", JSON.stringify(statsByDate));
-  localStorage.setItem("totalWorkTime", JSON.stringify(totalWorkTime));
-  localStorage.setItem("totalBreakTime", JSON.stringify(totalBreakTime));
-  localStorage.setItem("longestWorkStreak", JSON.stringify(longestWorkStreak));
-  localStorage.setItem("pomodorosCompletedToday", JSON.stringify(pomodorosCompletedToday));
 }
 
 // Function to get the daily date
@@ -227,9 +202,42 @@ function updateBadgeText(timeRemaining) {
   }
 }
 
+// REVIEW: Function that should techically save the statistics
+function saveDailyStats() {
+  const today = getTodayDateString();
+  const statsByDate = JSON.parse(localStorage.getItem("statsByDate")) || {};
+
+  if (!statsByDate[today]) {
+    statsByDate[today] = {
+      workSessionsCompleted: 0,
+      shortRestsCompleted: 0,
+      longRestsCompleted: 0,
+      pomodorosCompleted: 0,
+      totalWorkTime: 0,
+      totalBreakTime: 0,
+      longestWorkStreak: 0,
+    };
+  }
+
+  statsByDate[today].workSessionsCompleted = workSessionsCompleted;
+  statsByDate[today].shortRestsCompleted = shortRestsCompleted;
+  statsByDate[today].longRestsCompleted = longRestsCompleted;
+  statsByDate[today].totalWorkTime = totalWorkTime;
+  statsByDate[today].totalBreakTime = totalBreakTime;
+  statsByDate[today].longestWorkStreak = longestWorkStreak;
+
+  localStorage.setItem("statsByDate", JSON.stringify(statsByDate));
+  localStorage.setItem("totalWorkTime", JSON.stringify(totalWorkTime));
+  localStorage.setItem("totalBreakTime", JSON.stringify(totalBreakTime));
+  localStorage.setItem("longestWorkStreak", JSON.stringify(longestWorkStreak));
+  localStorage.setItem("pomodorosCompletedToday", JSON.stringify(pomodorosCompletedToday));
+}
+
 browser.runtime.onMessage.addListener((message) => {
   if (message.action === "startTimer") {
     startTimer();
+  } else if (message.action === "pauseTimer") {
+    pauseTimer();
   } else if (message.action === "resetTimer") {
     resetTimer();
   }

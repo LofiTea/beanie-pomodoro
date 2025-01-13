@@ -14,6 +14,11 @@ document.getElementById("resume").addEventListener("click", () => {
   browser.runtime.sendMessage({ action: "startTimer" });
 });
 
+document.getElementById("pause").addEventListener("click", () => {
+  document.getElementById("timer").textContent = "";
+ browser.runtime.sendMessage({ action: "pauseTimer" });
+});
+
 document.getElementById("reset").addEventListener("click", () => {
   document.getElementById("timer").textContent = "";
   browser.runtime.sendMessage({ action: "resetTimer" });
@@ -21,8 +26,4 @@ document.getElementById("reset").addEventListener("click", () => {
 
 document.getElementById("options").addEventListener("click", () => {
   window.open("../web/options.html", "_blank");
-});
-
-document.getElementById("stats").addEventListener("click", () => {
-  window.open("../web/stats.html", "_blank");
 });
