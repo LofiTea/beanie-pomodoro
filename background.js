@@ -22,9 +22,7 @@ let timer;
 let timeRemaining;
 let notificationSoundEnabled;
 
-// Add a pause functionality?
-// Reformat the work and rest periods
-// Make sure to reset the stats if a new starts
+// TODO: Make sure the stats functionality is working
 
 /** 
 function loadSettings() {
@@ -50,7 +48,16 @@ function loadSettings() {
 }
 */
 
+// Function that loads in the settings
 function loadSettings() {
+  const today = getTodayDateString();
+  const lastSavedDate = localStorage.getItem("lastSavedDate");
+
+  if (lastSavedDate !== today) {
+    resetDailyStats();
+    localStorage.setItem("lastSavedDate", today);
+  }
+
   workTime = (1 / 6) * 60;
   shortRestTime = (1 / 6) * 60;
   longRestTime = 0.25 * 60;
@@ -65,6 +72,20 @@ function loadSettings() {
 
   const sessionCountSetting = localStorage.getItem("sessionCount") || 4;
   shortRestsRemaining = sessionCountSetting;
+}
+
+// Function to set the daily statistics
+function resetDailyStats() {
+  workSessionsCompleted = 0;
+  shortRestsCompleted = 0;
+  longRestsCompleted = 0;
+  pomodorosCompletedToday = 0;
+  currentWorkStreak = 0;
+  localStorage.setItem("workSessionsCompleted", workSessionsCompleted);
+  localStorage.setItem("shortRestsCompleted", shortRestsCompleted);
+  localStorage.setItem("longRestsCompleted", longRestsCompleted);
+  localStorage.setItem("pomodorosCompletedToday", pomodorosCompletedToday);
+  localStorage.setItem("currentWorkStreak", currentWorkStreak);
 }
 
 // Function that starts the timer
@@ -202,7 +223,7 @@ function updateBadgeText(timeRemaining) {
   }
 }
 
-// REVIEW: Function that should techically save the statistics
+// Function that saves the daily statistics: Question is, how do I know what stats to check
 function saveDailyStats() {
   const today = getTodayDateString();
   const statsByDate = JSON.parse(localStorage.getItem("statsByDate")) || {};
@@ -231,6 +252,7 @@ function saveDailyStats() {
   localStorage.setItem("totalBreakTime", JSON.stringify(totalBreakTime));
   localStorage.setItem("longestWorkStreak", JSON.stringify(longestWorkStreak));
   localStorage.setItem("pomodorosCompletedToday", JSON.stringify(pomodorosCompletedToday));
+  localStorage.setItem("lastSavedDate", today);
 }
 
 browser.runtime.onMessage.addListener((message) => {

@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   const ctx = document.getElementById("pomodoro-chart").getContext("2d");
-  const workSessionCountEl = document.getElementById("work-session-count");
-  const shortRestSessionCountEl = document.getElementById("short-rest-session-count");
-  const longRestSessionCountEl = document.getElementById("long-rest-session-count");
-  const totalWorkTimeEl = document.getElementById("total-work-time");
-  const totalBreakTimeEl = document.getElementById("total-break-time");
-  const longestWorkStreakEl = document.getElementById("longest-work-streak");
-  const pomodorosCompletedTodayEl = document.getElementById("pomodoros-completed-today");
+  const workSessionCount = document.getElementById("work-session-count");
+  const shortRestSessionCount = document.getElementById("short-rest-session-count");
+  const longRestSessionCount = document.getElementById("long-rest-session-count");
+  const totalWorkTime = document.getElementById("total-work-time");
+  const totalBreakTime = document.getElementById("total-break-time");
+  const longestWorkStreak = document.getElementById("longest-work-streak");
+  const pomodorosCompletedToday = document.getElementById("pomodoros-completed-today");
   const datePicker = document.getElementById("date-picker");
   const timeRangeSelector = document.getElementById("time-range");
   const pomodoroChart = new Chart(ctx, {
@@ -49,22 +49,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const statsByDate = JSON.parse(localStorage.getItem("statsByDate")) || {};
 
     if (statsByDate[date]) {
-      workSessionCountEl.textContent = statsByDate[date].workSessionsCompleted || 0;
-      shortRestSessionCountEl.textContent = statsByDate[date].shortRestsCompleted || 0;
-      longRestSessionCountEl.textContent = statsByDate[date].longRestsCompleted || 0;
+      workSessionCount.textContent = statsByDate[date].workSessionsCompleted || 0;
+      shortRestSessionCount.textContent = statsByDate[date].shortRestsCompleted || 0;
+      longRestSessionCount.textContent = statsByDate[date].longRestsCompleted || 0;
 
-      totalWorkTimeEl.textContent = formatTime(statsByDate[date].totalWorkTime || 0);
-      totalBreakTimeEl.textContent = formatTime(statsByDate[date].totalBreakTime || 0);
-      longestWorkStreakEl.textContent = statsByDate[date].longestWorkStreak || 0;
-      pomodorosCompletedTodayEl.textContent = statsByDate[date].pomodorosCompleted || 0;
+      totalWorkTime.textContent = formatTime(statsByDate[date].totalWorkTime || 0);
+      totalBreakTime.textContent = formatTime(statsByDate[date].totalBreakTime || 0);
+      longestWorkStreak.textContent = statsByDate[date].longestWorkStreak || 0;
+      pomodorosCompletedToday.textContent = statsByDate[date].pomodorosCompleted || 0;
     } else {
-      workSessionCountEl.textContent = 0;
-      shortRestSessionCountEl.textContent = 0;
-      longRestSessionCountEl.textContent = 0;
-      totalWorkTimeEl.textContent = formatTime(0);
-      totalBreakTimeEl.textContent = formatTime(0);
-      longestWorkStreakEl.textContent = 0;
-      pomodorosCompletedTodayEl.textContent = 0;
+      workSessionCount.textContent = 0;
+      shortRestSessionCount.textContent = 0;
+      longRestSessionCount.textContent = 0;
+      totalWorkTime.textContent = formatTime(0);
+      totalBreakTime.textContent = formatTime(0);
+      longestWorkStreak.textContent = 0;
+      pomodorosCompletedToday.textContent = 0;
     }
   }
 
@@ -85,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     pomodoroChart.update();
   }
 
+  // This function is not correct
   function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);

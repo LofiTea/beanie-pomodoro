@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const longRestTimeInput = document.getElementById("long-rest-time");
   const sessionCountSelect = document.getElementById("session-count");
   const notificationSoundCheckbox = document.getElementById("notification-sound-checkbox");
+  const startAutomaticallyCheckbox = document.getElementById("start-automatically-checkbox");
 
   function loadSettings() {
     workTimeInput.value = localStorage.getItem("workTime") || 25;
@@ -11,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     longRestTimeInput.value = localStorage.getItem("longRestTime") || 15;
     sessionCountSelect.value = localStorage.getItem("sessionCount") || 4;
     notificationSoundCheckbox.checked = JSON.parse(localStorage.getItem("notificationSound")) || false;
+    startAutomaticallyCheckbox.checked =JSON.parse(localStorage.getItem("startAutomatically")) || false;
   }
 
   function saveSettings() {
@@ -19,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem("longRestTime", longRestTimeInput.value);
     localStorage.setItem("sessionCount", sessionCountSelect.value);
     localStorage.setItem("notificationSound", notificationSoundCheckbox.checked);
+    localStorage.setItem("startAutomatically", startAutomaticallyCheckbox.checked);
   }
 
   function resetSettings() {
@@ -27,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem("longRestTime", 15);
     localStorage.setItem("sessionCount", 4);
     localStorage.setItem("notificationSound", false);
+    localStorage.setItem("startAutomatically", false);
     loadSettings();
   }
 
