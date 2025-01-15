@@ -24,7 +24,8 @@ let timer;
 let timeRemaining;
 let notificationSoundEnabled;
 
-/** 
+
+// Function that loads in the settings
 function loadSettings() {
   workTime = JSON.parse(localStorage.getItem("workTime")) * 60 || 25 * 60;
   shortRestTime =
@@ -46,9 +47,9 @@ function loadSettings() {
   const sessionCountSetting = localStorage.getItem("sessionCount") || 4;
   shortRestsRemaining = sessionCountSetting;
 }
-*/
 
-// Function that loads in the settings
+/**
+// Debugging Settings
 function loadSettings() {
   const today = getTodayDateString();
   const lastSavedDate = localStorage.getItem("lastSavedDate");
@@ -74,6 +75,7 @@ function loadSettings() {
   const sessionCountSetting = localStorage.getItem("sessionCount") || 4;
   shortRestsRemaining = sessionCountSetting;
 }
+*/
 
 // Function to set the daily statistics
 function resetDailyStats() {
