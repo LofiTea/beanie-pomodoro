@@ -52,11 +52,10 @@ document.addEventListener("DOMContentLoaded", () => {
       workSessionCount.textContent = statsByDate[date].workSessionsCompleted || 0;
       shortRestSessionCount.textContent = statsByDate[date].shortRestsCompleted || 0;
       longRestSessionCount.textContent = statsByDate[date].longRestsCompleted || 0;
-
       totalWorkTime.textContent = formatTime(statsByDate[date].totalWorkTime || 0);
       totalBreakTime.textContent = formatTime(statsByDate[date].totalBreakTime || 0);
       longestWorkStreak.textContent = statsByDate[date].longestWorkStreak || 0;
-      pomodorosCompletedToday.textContent = statsByDate[date].pomodorosCompleted || 0;
+      pomodorosCompletedToday.textContent = statsByDate[date].pomodorosCompletedToday || 0;
     } else {
       workSessionCount.textContent = 0;
       shortRestSessionCount.textContent = 0;
@@ -75,8 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const dates = Object.keys(statsByDate).sort((a, b) => new Date(b) - new Date(a)).slice(0, days);
     dates.reverse().forEach((date) => {
-      const pomodorosCompleted = statsByDate[date].pomodorosCompleted || 0;
-      totalPomodoros.push(pomodorosCompleted);
+      const pomodorosCompletedToday = statsByDate[date].pomodorosCompletedToday || 0;
+      totalPomodoros.push(pomodorosCompletedToday);
       labels.push(date);
     });
 
@@ -85,7 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
     pomodoroChart.update();
   }
 
-  // This function is not correct
   function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);

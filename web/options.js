@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     longRestTimeInput.value = localStorage.getItem("longRestTime") || 15;
     sessionCountSelect.value = localStorage.getItem("sessionCount") || 4;
     notificationSoundCheckbox.checked = JSON.parse(localStorage.getItem("notificationSound")) || false;
-    startAutomaticallyCheckbox.checked =JSON.parse(localStorage.getItem("startAutomatically")) || false;
+    startAutomaticallyCheckbox.checked =JSON.parse(localStorage.getItem("startAutomatically")) || true;
   }
 
   function saveSettings() {

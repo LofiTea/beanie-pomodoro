@@ -14,7 +14,7 @@ document.getElementById("stats").addEventListener("click", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  const completedPomodoros = localStorage.getItem("pomodorosCompleted") || 0;
+  const completedPomodoros = localStorage.getItem("pomodorosCompletedToday") || 0;
   const remainingPomodoros = localStorage.getItem("shortRestsRemaining") || 0;
   const completedPomodorosElement = document.querySelector(".completed-pomodoros");
   const remainingPomodorosElement = document.querySelector(".remaining-pomodoros");

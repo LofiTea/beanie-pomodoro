@@ -3,26 +3,26 @@ let workTime;
 let shortRestTime;
 let longRestTime;
 
-// Statistics variables
+// Statistic variables
 let currentSession = "work";
 let sessionCount = 0;
+let shortRestsCompleted = 0;
+let currentWorkStreak = 0;
+let pomodorosCompletedToday = 0;
+
+// Saved daily statistics
 let workSessionsCompleted = 0;
 let shortRestsRemaining = 0;
-let shortRestsCompleted = 0;
 let longRestsCompleted = 0;
-
+let pomodorosCompleted = 0;
 let totalWorkTime = 0;
 let totalBreakTime = 0;
 let longestWorkStreak = 0;
-let currentWorkStreak = 0;
-let pomodorosCompletedToday = 0;
 
 // Settings variables
 let timer;
 let timeRemaining;
 let notificationSoundEnabled;
-
-// TODO: Make sure the stats functionality is working
 
 /** 
 function loadSettings() {
@@ -58,10 +58,11 @@ function loadSettings() {
     localStorage.setItem("lastSavedDate", today);
   }
 
-  workTime = (1 / 6) * 60;
-  shortRestTime = (1 / 6) * 60;
-  longRestTime = 0.25 * 60;
+  workTime = 60;
+  shortRestTime = 60;
+  longRestTime = 65;
   notificationSoundEnabled = JSON.parse(localStorage.getItem("notificationSound")) || false;
+  startAutomatically = JSON.parse(localStorage.getItem("startAutomatically")) || true;
   sessionCount = 0;
   timeRemaining = workTime;
 
@@ -139,7 +140,7 @@ function sessionCompleted() {
     }
 
     localStorage.setItem("workSessionsCompleted", workSessionsCompleted);
-    localStorage.setItem("shortRestsRemaining", shortRestsRemaining);
+    localStorage.setItem("totalWorkTime", totalWorkTime);
     localStorage.setItem("longestWorkStreak", longestWorkStreak);
   } else {
     pomodorosCompletedToday++;
@@ -155,6 +156,10 @@ function sessionCompleted() {
     switchPopup("../session/session-work.html");
     currentSession = "work";
     timeRemaining = workTime;
+
+    localStorage.setItem("totalBreakTime", totalBreakTime);
+    localStorage.setItem("shortRestsRemaining", shortRestsRemaining);
+    localStorage.setItem("longRestsRemaining", longRestsRemaining);
     localStorage.setItem("pomodorosCompletedToday", pomodorosCompletedToday);
   }
   saveDailyStats();
@@ -233,7 +238,7 @@ function saveDailyStats() {
       workSessionsCompleted: 0,
       shortRestsCompleted: 0,
       longRestsCompleted: 0,
-      pomodorosCompleted: 0,
+      pomodorosCompletedToday: 0,
       totalWorkTime: 0,
       totalBreakTime: 0,
       longestWorkStreak: 0,
@@ -243,6 +248,7 @@ function saveDailyStats() {
   statsByDate[today].workSessionsCompleted = workSessionsCompleted;
   statsByDate[today].shortRestsCompleted = shortRestsCompleted;
   statsByDate[today].longRestsCompleted = longRestsCompleted;
+  statsByDate[today].pomodorosCompletedToday = pomodorosCompletedToday;
   statsByDate[today].totalWorkTime = totalWorkTime;
   statsByDate[today].totalBreakTime = totalBreakTime;
   statsByDate[today].longestWorkStreak = longestWorkStreak;
