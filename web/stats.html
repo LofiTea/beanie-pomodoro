@@ -44,6 +44,12 @@
     </div>
 
     <h3 class="text-center mt-5">Session Summary</h3>
+    
+    <div class="form-group mt-4">
+      <label for="date-picker">Select Date:</label>
+      <input type="date" id="date-picker" class="form-control">
+    </div>
+
     <div class="session-summary mt-4">
       <table class="table table-bordered">
         <tbody>
@@ -80,21 +86,19 @@
     </div>
 
     <h3 class="text-center mt-5">Pomodoro Chart</h3>
-    <div class="chart-container mt-4">
-      <canvas id="pomodoro-chart"></canvas>
-    </div>
-
-    <div class="form-group mt-4">
-      <label for="date-picker">Select Date:</label>
-      <input type="date" id="date-picker" class="form-control">
-    </div>
 
     <div class="form-group">
       <label for="time-range">Select Time Range:</label>
       <select id="time-range" class="form-control">
+        <option value="1">Last 1 Day</option>
+        <option value="3">Last 3 Days</option>
         <option value="7">Last 7 Days</option>
         <option value="30">Last 30 Days</option>
       </select>
+    </div>
+
+    <div class="chart-container mt-4">
+      <canvas id="pomodoro-chart"></canvas>
     </div>
   </div>
 

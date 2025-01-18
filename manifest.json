@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Beanie Pomodoro",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A customized Pomodoro timer that cycles through work sessions, short breaks, and long breaks.",
   "icons": {
     "48": "/assets/icons/beanie-icon.png"
