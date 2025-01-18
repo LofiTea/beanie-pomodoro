@@ -24,7 +24,6 @@ let timer;
 let timeRemaining;
 let notificationSoundEnabled;
 
-
 // Function that loads in the settings
 function loadSettings() {
   const today = getTodayDateString();
@@ -67,9 +66,9 @@ function loadSettings() {
     localStorage.setItem("lastSavedDate", today);
   }
 
-  workTime = 60;
-  shortRestTime = 60;
-  longRestTime = 65;
+  workTime = 0.05 * 60;
+  shortRestTime = 0.05 * 60;
+  longRestTime = 0.1 * 60;
   notificationSoundEnabled = JSON.parse(localStorage.getItem("notificationSound")) || false;
   startAutomatically = JSON.parse(localStorage.getItem("startAutomatically")) || true;
   sessionCount = 0;

@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const remainingPomodoros = localStorage.getItem("shortRestsRemaining") || 0;
   const completedPomodorosElement = document.querySelector(".completed-pomodoros");
   const remainingPomodorosElement = document.querySelector(".remaining-pomodoros");
+  const resumeButton = document.getElementById("resume1");
+  const statsButton = document.getElementById("stats1");
 
   if (completedPomodorosElement) {
     completedPomodorosElement.textContent = completedPomodoros;
@@ -26,4 +28,26 @@ document.addEventListener("DOMContentLoaded", () => {
   if (remainingPomodorosElement) {
     remainingPomodorosElement.textContent = remainingPomodoros;
   }
+
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark");
+    resumeButton.src = "../assets/icons/resume-icon-dark.jpg";
+    statsButton.src = "../assets/icons/stats-icon-dark.jpg";
+  }
+
+  document.getElementById("darkModeButton").addEventListener("click", function () {
+    let body = document.body;
+
+    body.classList.toggle("dark");
+
+    if (body.classList.contains("dark")) {
+      localStorage.setItem("darkMode", "enabled");
+      resumeButton.src = "../assets/icons/resume-icon-dark.jpg";
+      statsButton.src = "../assets/icons/stats-icon-dark.jpg";
+    } else {
+      localStorage.setItem("darkMode", "disabled");
+      resumeButton.src = "../assets/icons/resume-icon.jpg";
+      statsButton.src = "../assets/icons/stats-icon.jpg";
+    }
+  });
 });

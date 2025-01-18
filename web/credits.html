@@ -44,13 +44,27 @@
         .credits-container .name {
             margin-left: 10px;
         }
+
+        .dark {
+            background-color: #222;
+            color: #e6e6e6;
+        }
+
+        #darkModeButton {
+            background: transparent; 
+            border: none;
+        }
+
+        .switch {
+            height: 30px;
+        }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Beanie Pomodoro</a>
-        <div class="collapse navbar-collapse">
+        <div class="dark-navbar collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item" id="nav-panel">
                     <a class="nav-link" href="options.html">Options</a>
@@ -63,12 +77,15 @@
                 </li>
             </ul>
         </div>
+        <button id="darkModeButton" class="btn ml-auto" type="button">
+            <img src="../assets/images/switch-mode.png" alt="Button Image" class="switch">
+        </button>
     </nav>
 
     <div class="container my-5">
         <h1 class="text-center">Credits</h1>
         <hr>
-        <img src="../assets/images/harmon.jpg" alt="Centered Image" class="centered-image">
+        <img src="../assets/images/harmon.png" alt="Centered Image" class="centered-image">
         <p class = "text-center">If there is a bug or if you have a suggestion, feel free to send an email <a
                 href="mailto:iwilldiscoveraurora@gmail.com">here!</a></p>
 
@@ -81,6 +98,7 @@
             <div class="name">LofiTea</div>
         </div>
     </div>
+    <script src="credits.js"></script>
 </body>
 
 </html>

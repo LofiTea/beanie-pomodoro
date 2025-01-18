@@ -22,3 +22,16 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
+
+.dark {
+  background-color: #222;
+  color: #e6e6e6;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #333 !important;
+  color: #e6e6e6 !important;
+  border: 1px solid #555 !important;
+}

@@ -58,3 +58,25 @@ body {
 .outlined-button:hover {
     color: white;
 }
+
+.dark {
+    background-color: #222;
+    color: #e6e6e6;
+    border: 2px solid white;
+}
+
+.dark button {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background-color: black;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}

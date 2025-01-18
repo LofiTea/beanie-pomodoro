@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const pomodorosCompletedToday = document.getElementById("pomodoros-completed-today");
   const datePicker = document.getElementById("date-picker");
   const timeRangeSelector = document.getElementById("time-range");
+  const table = document.getElementById("table");
   const pomodoroChart = new Chart(ctx, {
     type: "bar",
     data: {
@@ -95,4 +96,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const today = new Date();
     return today.toISOString().split("T")[0];
   }
+
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark");
+    document.getElementById("navbar").classList.add("navbar-dark");
+    document.getElementById("navbar").classList.add("bg-dark");
+    document.getElementById("navbar").classList.remove("navbar-light");
+    document.getElementById("navbar").classList.remove("bg-light");
+  }
+
+  document.getElementById("darkModeButton").addEventListener("click", function () {
+      let body = document.body;
+      let navbar = document.getElementById("navbar");
+
+      body.classList.toggle("dark");
+      navbar.classList.toggle("navbar-light");
+      navbar.classList.toggle("bg-light");
+      navbar.classList.toggle("navbar-dark");
+      navbar.classList.toggle("bg-dark");
+
+      if (body.classList.contains("dark")) {
+        localStorage.setItem("darkMode", "enabled");
+      } else {
+        localStorage.setItem("darkMode", "disabled");
+      }
+    });
 });

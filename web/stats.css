@@ -54,3 +54,23 @@ td {
   text-align: center;
   font-weight: bold;
 }
+
+.dark {
+  background-color: #222;
+  color: #e6e6e6;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #333 !important;
+  color: #e6e6e6 !important;
+  border: 1px solid #555 !important;
+}
+
+.dark table,
+.dark th,
+.dark td {
+  background-color: #333 !important;
+  color: #e6e6e6 !important;
+}
