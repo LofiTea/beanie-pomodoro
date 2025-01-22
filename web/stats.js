@@ -1,12 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
   const ctx = document.getElementById("pomodoro-chart").getContext("2d");
   const workSessionCount = document.getElementById("work-session-count");
-  const shortRestSessionCount = document.getElementById("short-rest-session-count");
-  const longRestSessionCount = document.getElementById("long-rest-session-count");
+  const shortRestSessionCount = document.getElementById(
+    "short-rest-session-count"
+  );
+  const longRestSessionCount = document.getElementById(
+    "long-rest-session-count"
+  );
   const totalWorkTime = document.getElementById("total-work-time");
   const totalBreakTime = document.getElementById("total-break-time");
   const longestWorkStreak = document.getElementById("longest-work-streak");
-  const pomodorosCompletedToday = document.getElementById("pomodoros-completed-today");
+  const pomodorosCompletedToday = document.getElementById(
+    "pomodoros-completed-today"
+  );
   const datePicker = document.getElementById("date-picker");
   const timeRangeSelector = document.getElementById("time-range");
   const table = document.getElementById("table");
@@ -47,42 +53,58 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function updateSessionCounts(date) {
-    const statsByDate = JSON.parse(localStorage.getItem("statsByDate")) || {};
+    chrome.storage.local.get(["statsByDate"], (result) => {
+      const statsByDate = result.statsByDate || {};
 
-    if (statsByDate[date]) {
-      workSessionCount.textContent = statsByDate[date].workSessionsCompleted || 0;
-      shortRestSessionCount.textContent = statsByDate[date].shortRestsCompleted || 0;
-      longRestSessionCount.textContent = statsByDate[date].longRestsCompleted || 0;
-      totalWorkTime.textContent = formatTime(statsByDate[date].totalWorkTime || 0);
-      totalBreakTime.textContent = formatTime(statsByDate[date].totalBreakTime || 0);
-      longestWorkStreak.textContent = statsByDate[date].longestWorkStreak || 0;
-      pomodorosCompletedToday.textContent = statsByDate[date].pomodorosCompletedToday || 0;
-    } else {
-      workSessionCount.textContent = 0;
-      shortRestSessionCount.textContent = 0;
-      longRestSessionCount.textContent = 0;
-      totalWorkTime.textContent = formatTime(0);
-      totalBreakTime.textContent = formatTime(0);
-      longestWorkStreak.textContent = 0;
-      pomodorosCompletedToday.textContent = 0;
-    }
+      if (statsByDate[date]) {
+        workSessionCount.textContent =
+          statsByDate[date].workSessionsCompleted || 0;
+        shortRestSessionCount.textContent =
+          statsByDate[date].shortRestsCompleted || 0;
+        longRestSessionCount.textContent =
+          statsByDate[date].longRestsCompleted || 0;
+        totalWorkTime.textContent = formatTime(
+          statsByDate[date].totalWorkTime || 0
+        );
+        totalBreakTime.textContent = formatTime(
+          statsByDate[date].totalBreakTime || 0
+        );
+        longestWorkStreak.textContent =
+          statsByDate[date].longestWorkStreak || 0;
+        pomodorosCompletedToday.textContent =
+          statsByDate[date].pomodorosCompletedToday || 0;
+      } else {
+        workSessionCount.textContent = 0;
+        shortRestSessionCount.textContent = 0;
+        longRestSessionCount.textContent = 0;
+        totalWorkTime.textContent = formatTime(0);
+        totalBreakTime.textContent = formatTime(0);
+        longestWorkStreak.textContent = 0;
+        pomodorosCompletedToday.textContent = 0;
+      }
+    });
   }
 
   function updateChart(days) {
-    const statsByDate = JSON.parse(localStorage.getItem("statsByDate")) || {};
-    const totalPomodoros = [];
-    const labels = [];
+    chrome.storage.local.get(["statsByDate"], (result) => {
+      const statsByDate = result.statsByDate || {};
+      const totalPomodoros = [];
+      const labels = [];
 
-    const dates = Object.keys(statsByDate).sort((a, b) => new Date(b) - new Date(a)).slice(0, days);
-    dates.reverse().forEach((date) => {
-      const pomodorosCompletedToday = statsByDate[date].pomodorosCompletedToday || 0;
-      totalPomodoros.push(pomodorosCompletedToday);
-      labels.push(date);
+      const dates = Object.keys(statsByDate)
+        .sort((a, b) => new Date(b) - new Date(a))
+        .slice(0, days);
+      dates.reverse().forEach((date) => {
+        const pomodorosCompletedToday =
+          statsByDate[date].pomodorosCompletedToday || 0;
+        totalPomodoros.push(pomodorosCompletedToday);
+        labels.push(date);
+      });
+
+      pomodoroChart.data.labels = labels;
+      pomodoroChart.data.datasets[0].data = totalPomodoros;
+      pomodoroChart.update();
     });
-
-    pomodoroChart.data.labels = labels;
-    pomodoroChart.data.datasets[0].data = totalPomodoros;
-    pomodoroChart.update();
   }
 
   function formatTime(seconds) {
@@ -97,15 +119,19 @@ document.addEventListener("DOMContentLoaded", () => {
     return today.toISOString().split("T")[0];
   }
 
-  if (localStorage.getItem("darkMode") === "enabled") {
-    document.body.classList.add("dark");
-    document.getElementById("navbar").classList.add("navbar-dark");
-    document.getElementById("navbar").classList.add("bg-dark");
-    document.getElementById("navbar").classList.remove("navbar-light");
-    document.getElementById("navbar").classList.remove("bg-light");
-  }
+  chrome.storage.local.get(["darkMode"], (result) => {
+    if (result.darkMode === "enabled") {
+      document.body.classList.add("dark");
+      document.getElementById("navbar").classList.add("navbar-dark");
+      document.getElementById("navbar").classList.add("bg-dark");
+      document.getElementById("navbar").classList.remove("navbar-light");
+      document.getElementById("navbar").classList.remove("bg-light");
+    }
+  });
 
-  document.getElementById("darkModeButton").addEventListener("click", function () {
+  document
+    .getElementById("darkModeButton")
+    .addEventListener("click", function () {
       let body = document.body;
       let navbar = document.getElementById("navbar");
 
@@ -116,9 +142,9 @@ document.addEventListener("DOMContentLoaded", () => {
       navbar.classList.toggle("bg-dark");
 
       if (body.classList.contains("dark")) {
-        localStorage.setItem("darkMode", "enabled");
+        chrome.storage.local.set({ darkMode: "enabled" });
       } else {
-        localStorage.setItem("darkMode", "disabled");
+        chrome.storage.local.set({ darkMode: "disabled" });
       }
     });
 });

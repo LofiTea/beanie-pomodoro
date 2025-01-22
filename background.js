@@ -27,62 +27,45 @@ let notificationSoundEnabled;
 // Function that loads in the settings
 function loadSettings() {
   const today = getTodayDateString();
-  const lastSavedDate = localStorage.getItem("lastSavedDate");
+  chrome.storage.local.get(["lastSavedDate"], (result) => {
+    const lastSavedDate = result.lastSavedDate;
 
-  if (lastSavedDate !== today) {
-    resetDailyStats();
-    localStorage.setItem("lastSavedDate", today);
-  }
-  
-  workTime = JSON.parse(localStorage.getItem("workTime")) * 60 || 25 * 60;
-  shortRestTime =
-    JSON.parse(localStorage.getItem("shortRestTime")) * 60 || 5 * 60;
-  longRestTime =
-    JSON.parse(localStorage.getItem("longRestTime")) * 60 || 15 * 60;
-  notificationSoundEnabled =
-    JSON.parse(localStorage.getItem("notificationSound")) || false;
-  sessionCount = 0;
-  timeRemaining = workTime;
+    if (lastSavedDate !== today) {
+      resetDailyStats();
+      chrome.storage.local.set({ lastSavedDate: today });
+    }
 
-  totalWorkTime = JSON.parse(localStorage.getItem("totalWorkTime")) || 0;
-  totalBreakTime = JSON.parse(localStorage.getItem("totalBreakTime")) || 0;
-  longestWorkStreak =
-    JSON.parse(localStorage.getItem("longestWorkStreak")) || 0;
-  pomodorosCompletedToday =
-    JSON.parse(localStorage.getItem("pomodorosCompletedToday")) || 0;
+    chrome.storage.local.get(
+      [
+        "workTime",
+        "shortRestTime",
+        "longRestTime",
+        "notificationSound",
+        "totalWorkTime",
+        "totalBreakTime",
+        "longestWorkStreak",
+        "pomodorosCompletedToday",
+        "sessionCount",
+      ],
+      (result) => {
+        workTime = (result.workTime || 25) * 60;
+        shortRestTime = (result.shortRestTime || 5) * 60;
+        longRestTime = (result.longRestTime || 15) * 60;
+        notificationSoundEnabled = result.notificationSound || false;
+        sessionCount = 0;
+        timeRemaining = workTime;
 
-  const sessionCountSetting = localStorage.getItem("sessionCount") || 4;
-  shortRestsRemaining = sessionCountSetting;
+        totalWorkTime = result.totalWorkTime || 0;
+        totalBreakTime = result.totalBreakTime || 0;
+        longestWorkStreak = result.longestWorkStreak || 0;
+        pomodorosCompletedToday = result.pomodorosCompletedToday || 0;
+
+        const sessionCountSetting = result.sessionCount || 4;
+        shortRestsRemaining = sessionCountSetting;
+      }
+    );
+  });
 }
-
-/**
-// Debugging Settings
-function loadSettings() {
-  const today = getTodayDateString();
-  const lastSavedDate = localStorage.getItem("lastSavedDate");
-
-  if (lastSavedDate !== today) {
-    resetDailyStats();
-    localStorage.setItem("lastSavedDate", today);
-  }
-
-  workTime = 0.05 * 60;
-  shortRestTime = 0.05 * 60;
-  longRestTime = 0.1 * 60;
-  notificationSoundEnabled = JSON.parse(localStorage.getItem("notificationSound")) || false;
-  startAutomatically = JSON.parse(localStorage.getItem("startAutomatically")) || true;
-  sessionCount = 0;
-  timeRemaining = workTime;
-
-  totalWorkTime = JSON.parse(localStorage.getItem("totalWorkTime")) || 0;
-  totalBreakTime = JSON.parse(localStorage.getItem("totalBreakTime")) || 0;
-  longestWorkStreak = JSON.parse(localStorage.getItem("longestWorkStreak")) || 0;
-  pomodorosCompletedToday = JSON.parse(localStorage.getItem("pomodorosCompletedToday")) || 0;
-
-  const sessionCountSetting = localStorage.getItem("sessionCount") || 4;
-  shortRestsRemaining = sessionCountSetting;
-}
-*/
 
 // Function to set the daily statistics
 function resetDailyStats() {
@@ -91,11 +74,13 @@ function resetDailyStats() {
   longRestsCompleted = 0;
   pomodorosCompletedToday = 0;
   currentWorkStreak = 0;
-  localStorage.setItem("workSessionsCompleted", workSessionsCompleted);
-  localStorage.setItem("shortRestsCompleted", shortRestsCompleted);
-  localStorage.setItem("longRestsCompleted", longRestsCompleted);
-  localStorage.setItem("pomodorosCompletedToday", pomodorosCompletedToday);
-  localStorage.setItem("currentWorkStreak", currentWorkStreak);
+  chrome.storage.local.set({
+    workSessionsCompleted,
+    shortRestsCompleted,
+    longRestsCompleted,
+    pomodorosCompletedToday,
+    currentWorkStreak,
+  });
 }
 
 // Function that starts the timer
@@ -104,13 +89,16 @@ function startTimer() {
     timer = setInterval(() => {
       timeRemaining--;
       updateBadgeText(timeRemaining);
-      browser.runtime.sendMessage({ action: "updateTimer", timeRemaining: timeRemaining });
+      chrome.runtime.sendMessage({
+        action: "updateTimer",
+        timeRemaining: timeRemaining,
+      });
 
       if (timeRemaining < 0) {
-        browser.browserAction.setBadgeText({ text: "" });
+        chrome.action.setBadgeText({ text: "" });
         clearInterval(timer);
         timer = null;
-        browser.runtime.sendMessage({ action: "clearTimerText" });
+        chrome.runtime.sendMessage({ action: "clearTimerText" });
         if (notificationSoundEnabled) {
           playNotificationSound();
         }
@@ -129,12 +117,12 @@ function sessionCompleted() {
     totalWorkTime += workTime;
     currentWorkStreak++;
 
-    if ((sessionCount === 0) || (shortRestsRemaining === 0)) {
+    if (sessionCount === 0 || shortRestsRemaining === 0) {
       switchPopup("../session/session-rest.html");
       openNewTab("../page/page-long-rest.html");
       currentSession = "longBreak";
       timeRemaining = longRestTime;
-      shortRestsRemaining = localStorage.getItem("sessionCount") || 4;
+      shortRestsRemaining = 4;
       longRestsCompleted++;
     } else {
       switchPopup("../session/session-rest.html");
@@ -148,9 +136,11 @@ function sessionCompleted() {
       longestWorkStreak = currentWorkStreak;
     }
 
-    localStorage.setItem("workSessionsCompleted", workSessionsCompleted);
-    localStorage.setItem("totalWorkTime", totalWorkTime);
-    localStorage.setItem("longestWorkStreak", longestWorkStreak);
+    chrome.storage.local.set({
+      workSessionsCompleted,
+      totalWorkTime,
+      longestWorkStreak,
+    });
   } else {
     pomodorosCompletedToday++;
 
@@ -166,10 +156,12 @@ function sessionCompleted() {
     currentSession = "work";
     timeRemaining = workTime;
 
-    localStorage.setItem("totalBreakTime", totalBreakTime);
-    localStorage.setItem("shortRestsRemaining", shortRestsRemaining);
-    localStorage.setItem("longRestsRemaining", longRestsRemaining);
-    localStorage.setItem("pomodorosCompletedToday", pomodorosCompletedToday);
+    chrome.storage.local.set({
+      totalBreakTime,
+      shortRestsRemaining,
+      longRestsRemaining,
+      pomodorosCompletedToday,
+    });
   }
   saveDailyStats();
 }
@@ -189,7 +181,7 @@ function resetTimer() {
     timeRemaining = longRestTime;
   }
 
-  browser.browserAction.setBadgeText({ text: "" });
+  chrome.action.setBadgeText({ text: "" });
 }
 
 // Function to stop the timer
@@ -199,7 +191,10 @@ function pauseTimer() {
     timer = null;
   }
   updateBadgeText(timeRemaining);
-  browser.runtime.sendMessage({ action: "updateTimer", timeRemaining: timeRemaining });
+  chrome.runtime.sendMessage({
+    action: "updateTimer",
+    timeRemaining: timeRemaining,
+  });
 }
 
 // Function to get the daily date
@@ -210,12 +205,12 @@ function getTodayDateString() {
 
 // Function to switch popups
 function switchPopup(popupPage) {
-  browser.browserAction.setPopup({ popup: popupPage });
+  chrome.action.setPopup({ popup: popupPage });
 }
 
 // Function to open a new tab
 function openNewTab(page) {
-  browser.tabs.create({ url: page });
+  chrome.tabs.create({ url: page });
 }
 
 // Function to play the custom alarm noise
@@ -228,49 +223,53 @@ function playNotificationSound() {
 function updateBadgeText(timeRemaining) {
   const minutes = Math.floor(timeRemaining / 60);
   const badgeText = minutes > 0 ? `${minutes}m` : `<1m`;
-  browser.browserAction.setBadgeText({ text: badgeText });
+  chrome.action.setBadgeText({ text: badgeText });
 
   if (currentSession === "work") {
-    browser.browserAction.setBadgeBackgroundColor({ color: " #be003f " });
+    chrome.action.setBadgeBackgroundColor({ color: "#be003f" });
   } else {
-    browser.browserAction.setBadgeBackgroundColor({ color: " #25be00 " });
+    chrome.action.setBadgeBackgroundColor({ color: "#25be00" });
   }
 }
 
-// Function that saves the daily statistics: Question is, how do I know what stats to check
+// Function that saves the daily statistics
 function saveDailyStats() {
   const today = getTodayDateString();
-  const statsByDate = JSON.parse(localStorage.getItem("statsByDate")) || {};
+  chrome.storage.local.get(["statsByDate"], (result) => {
+    const statsByDate = result.statsByDate || {};
 
-  if (!statsByDate[today]) {
-    statsByDate[today] = {
-      workSessionsCompleted: 0,
-      shortRestsCompleted: 0,
-      longRestsCompleted: 0,
-      pomodorosCompletedToday: 0,
-      totalWorkTime: 0,
-      totalBreakTime: 0,
-      longestWorkStreak: 0,
-    };
-  }
+    if (!statsByDate[today]) {
+      statsByDate[today] = {
+        workSessionsCompleted: 0,
+        shortRestsCompleted: 0,
+        longRestsCompleted: 0,
+        pomodorosCompletedToday: 0,
+        totalWorkTime: 0,
+        totalBreakTime: 0,
+        longestWorkStreak: 0,
+      };
+    }
 
-  statsByDate[today].workSessionsCompleted = workSessionsCompleted;
-  statsByDate[today].shortRestsCompleted = shortRestsCompleted;
-  statsByDate[today].longRestsCompleted = longRestsCompleted;
-  statsByDate[today].pomodorosCompletedToday = pomodorosCompletedToday;
-  statsByDate[today].totalWorkTime = totalWorkTime;
-  statsByDate[today].totalBreakTime = totalBreakTime;
-  statsByDate[today].longestWorkStreak = longestWorkStreak;
+    statsByDate[today].workSessionsCompleted = workSessionsCompleted;
+    statsByDate[today].shortRestsCompleted = shortRestsCompleted;
+    statsByDate[today].longRestsCompleted = longRestsCompleted;
+    statsByDate[today].pomodorosCompletedToday = pomodorosCompletedToday;
+    statsByDate[today].totalWorkTime = totalWorkTime;
+    statsByDate[today].totalBreakTime = totalBreakTime;
+    statsByDate[today].longestWorkStreak = longestWorkStreak;
 
-  localStorage.setItem("statsByDate", JSON.stringify(statsByDate));
-  localStorage.setItem("totalWorkTime", JSON.stringify(totalWorkTime));
-  localStorage.setItem("totalBreakTime", JSON.stringify(totalBreakTime));
-  localStorage.setItem("longestWorkStreak", JSON.stringify(longestWorkStreak));
-  localStorage.setItem("pomodorosCompletedToday", JSON.stringify(pomodorosCompletedToday));
-  localStorage.setItem("lastSavedDate", today);
+    chrome.storage.local.set({
+      statsByDate,
+      totalWorkTime,
+      totalBreakTime,
+      longestWorkStreak,
+      pomodorosCompletedToday,
+      lastSavedDate: today,
+    });
+  });
 }
 
-browser.runtime.onMessage.addListener((message) => {
+chrome.runtime.onMessage.addListener((message) => {
   if (message.action === "startTimer") {
     startTimer();
   } else if (message.action === "pauseTimer") {
