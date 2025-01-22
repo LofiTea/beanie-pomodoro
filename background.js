@@ -24,6 +24,23 @@ let timer;
 let timeRemaining;
 let notificationSoundEnabled;
 
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === "local") {
+    if (changes.workTime) {
+      workTime = changes.workTime.newValue * 60;
+    }
+    if (changes.shortRestTime) {
+      shortRestTime = changes.shortRestTime.newValue * 60;
+    }
+    if (changes.longRestTime) {
+      longRestTime = changes.longRestTime.newValue * 60;
+    }
+    if (changes.notificationSound) {
+      notificationSoundEnabled = changes.notificationSound.newValue;
+    }
+  }
+});
+
 // Function that loads in the settings
 function loadSettings() {
   const today = getTodayDateString();
@@ -276,6 +293,8 @@ chrome.runtime.onMessage.addListener((message) => {
     pauseTimer();
   } else if (message.action === "resetTimer") {
     resetTimer();
+  } else if (message.action === "reloadSettings") {
+    loadSettings();
   }
 });
 

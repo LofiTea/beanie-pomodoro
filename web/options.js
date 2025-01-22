@@ -32,29 +32,37 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function saveSettings() {
-    chrome.storage.local.set({
-      workTime: workTimeInput.value,
-      shortRestTime: shortRestTimeInput.value,
-      longRestTime: longRestTimeInput.value,
-      sessionCount: sessionCountSelect.value,
-      notificationSound: notificationSoundCheckbox.checked,
-      startAutomatically: startAutomaticallyCheckbox.checked,
-    });
+    chrome.storage.local.set(
+      {
+        workTime: workTimeInput.value,
+        shortRestTime: shortRestTimeInput.value,
+        longRestTime: longRestTimeInput.value,
+        sessionCount: sessionCountSelect.value,
+        notificationSound: notificationSoundCheckbox.checked,
+        startAutomatically: startAutomaticallyCheckbox.checked,
+      },
+      () => {
+        chrome.runtime.sendMessage({ action: "reloadSettings" });
+      }
+    );
   }
 
   function resetSettings() {
-    chrome.storage.local.set(
-      {
-        workTime: 25,
-        shortRestTime: 5,
-        longRestTime: 15,
-        sessionCount: 4,
-        notificationSound: false,
-        startAutomatically: false,
-      },
-      loadSettings
-    );
-  }
+  chrome.storage.local.set(
+    {
+      workTime: 25,
+      shortRestTime: 5,
+      longRestTime: 15,
+      sessionCount: 4,
+      notificationSound: false,
+      startAutomatically: false,
+    },
+    () => {
+      loadSettings();
+      chrome.runtime.sendMessage({ action: "reloadSettings" });
+    }
+  );
+}
 
   loadSettings();
 
