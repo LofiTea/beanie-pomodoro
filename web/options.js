@@ -40,8 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
     saveSettings();
     browser.browserAction.setPopup({ popup: "../session/session-work.html" });
-    browser.browserAction.setBadgeText({ text: "" }); // Optional: reset or show "25m" if you want
-    browser.browserAction.setBadgeBackgroundColor({ color: "#be003f" }); // Red for work
+    browser.browserAction.setBadgeText({ text: "" });
+    browser.browserAction.setBadgeBackgroundColor({ color: "#be003f" });
     browser.runtime.sendMessage({ action: "setToWorkSession" });
     alert("Settings saved!");
   });
