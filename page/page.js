@@ -1,6 +1,6 @@
 document.getElementById("resume").addEventListener("click", () => {
   chrome.storage.local.get(["startAutomatically"], (result) => {
-    const startAutomatically = result.startAutomatically || false;
+    const startAutomatically = result.startAutomatically || true;
 
     if (startAutomatically) {
       window.close();
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ["pomodorosCompletedToday", "shortRestsRemaining", "darkMode"],
     (result) => {
       const completedPomodoros = result.pomodorosCompletedToday || 0;
-      const remainingPomodoros = result.shortRestsRemaining || 0;
+      const remainingPomodoros = result.shortRestsRemaining || 4;
       const completedPomodorosElement = document.querySelector(
         ".completed-pomodoros"
       );

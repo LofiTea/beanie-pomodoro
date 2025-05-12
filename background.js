@@ -12,7 +12,10 @@ let pomodorosCompletedToday = 0;
 
 // Saved daily statistics
 let workSessionsCompleted = 0;
-let shortRestsRemaining = 0;
+let shortRestsRemaining = parseInt(localStorage.getItem("sessionCount"), 10);
+if (isNaN(shortRestsRemaining)) {
+  shortRestsRemaining = 4;
+}
 let longRestsCompleted = 0;
 let pomodorosCompleted = 0;
 let totalWorkTime = 0;
@@ -61,8 +64,7 @@ function loadSettings() {
         "totalWorkTime",
         "totalBreakTime",
         "longestWorkStreak",
-        "pomodorosCompletedToday",
-        "sessionCount",
+        "pomodorosCompletedToday"
       ],
       (result) => {
         workTime = (result.workTime || 25) * 60;
@@ -77,8 +79,6 @@ function loadSettings() {
         longestWorkStreak = result.longestWorkStreak || 0;
         pomodorosCompletedToday = result.pomodorosCompletedToday || 0;
 
-        const sessionCountSetting = result.sessionCount || 4;
-        shortRestsRemaining = sessionCountSetting;
       }
     );
   });
@@ -295,6 +295,12 @@ chrome.runtime.onMessage.addListener((message) => {
     resetTimer();
   } else if (message.action === "reloadSettings") {
     loadSettings();
+  } else if (message.action === "setToWorkSession") {
+    workSessionsCompleted--;
+    currentSession = "work";
+    timeRemaining = workTime;
+    chrome.browserAction.setBadgeText({ text: "" });
+    chrome.browserAction.setBadgeBackgroundColor({ color: "#be003f" });
   }
 });
 

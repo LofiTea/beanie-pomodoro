@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
       longRestTime: 15,
       sessionCount: 4,
       notificationSound: false,
-      startAutomatically: false,
+      startAutomatically: true,
     },
     () => {
       loadSettings();
@@ -67,10 +67,14 @@ document.addEventListener("DOMContentLoaded", function () {
   loadSettings();
 
   document
-    .getElementById("options-form")
+    .getElementById("new-options")
     .addEventListener("submit", function (event) {
       event.preventDefault();
       saveSettings();
+      chrome.browserAction.setPopup({ popup: "../session/session-work.html" });
+      chrome.browserAction.setBadgeText({ text: "" });
+      chrome.browserAction.setBadgeBackgroundColor({ color: "#be003f" });
+      chrome.runtime.sendMessage({ action: "setToWorkSession" });
       alert("Settings saved!");
     });
 
