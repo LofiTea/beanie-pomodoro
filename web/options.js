@@ -30,15 +30,19 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem("longRestTime", 15);
     localStorage.setItem("sessionCount", 4);
     localStorage.setItem("notificationSound", false);
-    localStorage.setItem("startAutomatically", false);
+    localStorage.setItem("startAutomatically", true);
     loadSettings();
   }
 
   loadSettings();
 
-  document.getElementById("options-form").addEventListener("submit", function (event) {
+  document.getElementById("new-settings").addEventListener("click", function (event) {
     event.preventDefault();
     saveSettings();
+    browser.browserAction.setPopup({ popup: "../session/session-work.html" });
+    browser.browserAction.setBadgeText({ text: "" }); // Optional: reset or show "25m" if you want
+    browser.browserAction.setBadgeBackgroundColor({ color: "#be003f" }); // Red for work
+    browser.runtime.sendMessage({ action: "setToWorkSession" });
     alert("Settings saved!");
   });
 

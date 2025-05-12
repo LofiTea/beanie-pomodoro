@@ -12,7 +12,7 @@ let pomodorosCompletedToday = 0;
 
 // Saved daily statistics
 let workSessionsCompleted = 0;
-let shortRestsRemaining = 0;
+let shortRestsRemaining = localStorage.getItem("sessionCount") || 4;
 let longRestsCompleted = 0;
 let pomodorosCompleted = 0;
 let totalWorkTime = 0;
@@ -35,42 +35,10 @@ function loadSettings() {
   }
   
   workTime = JSON.parse(localStorage.getItem("workTime")) * 60 || 25 * 60;
-  shortRestTime =
-    JSON.parse(localStorage.getItem("shortRestTime")) * 60 || 5 * 60;
-  longRestTime =
-    JSON.parse(localStorage.getItem("longRestTime")) * 60 || 15 * 60;
-  notificationSoundEnabled =
-    JSON.parse(localStorage.getItem("notificationSound")) || false;
-  sessionCount = 0;
-  timeRemaining = workTime;
-
-  totalWorkTime = JSON.parse(localStorage.getItem("totalWorkTime")) || 0;
-  totalBreakTime = JSON.parse(localStorage.getItem("totalBreakTime")) || 0;
-  longestWorkStreak =
-    JSON.parse(localStorage.getItem("longestWorkStreak")) || 0;
-  pomodorosCompletedToday =
-    JSON.parse(localStorage.getItem("pomodorosCompletedToday")) || 0;
-
-  const sessionCountSetting = localStorage.getItem("sessionCount") || 4;
-  shortRestsRemaining = sessionCountSetting;
-}
-
-/**
-// Debugging Settings
-function loadSettings() {
-  const today = getTodayDateString();
-  const lastSavedDate = localStorage.getItem("lastSavedDate");
-
-  if (lastSavedDate !== today) {
-    resetDailyStats();
-    localStorage.setItem("lastSavedDate", today);
-  }
-
-  workTime = 0.05 * 60;
-  shortRestTime = 0.05 * 60;
-  longRestTime = 0.1 * 60;
+  shortRestTime = JSON.parse(localStorage.getItem("shortRestTime")) * 60 || 5 * 60;
+  longRestTime = JSON.parse(localStorage.getItem("longRestTime")) * 60 || 15 * 60;
   notificationSoundEnabled = JSON.parse(localStorage.getItem("notificationSound")) || false;
-  startAutomatically = JSON.parse(localStorage.getItem("startAutomatically")) || true;
+  startAutomaticallyCheckbox = JSON.parse(localStorage.getItem("startAutomatically")) || true;
   sessionCount = 0;
   timeRemaining = workTime;
 
@@ -78,11 +46,7 @@ function loadSettings() {
   totalBreakTime = JSON.parse(localStorage.getItem("totalBreakTime")) || 0;
   longestWorkStreak = JSON.parse(localStorage.getItem("longestWorkStreak")) || 0;
   pomodorosCompletedToday = JSON.parse(localStorage.getItem("pomodorosCompletedToday")) || 0;
-
-  const sessionCountSetting = localStorage.getItem("sessionCount") || 4;
-  shortRestsRemaining = sessionCountSetting;
 }
-*/
 
 // Function to set the daily statistics
 function resetDailyStats() {
@@ -91,6 +55,7 @@ function resetDailyStats() {
   longRestsCompleted = 0;
   pomodorosCompletedToday = 0;
   currentWorkStreak = 0;
+  currentSession = "work";
   localStorage.setItem("workSessionsCompleted", workSessionsCompleted);
   localStorage.setItem("shortRestsCompleted", shortRestsCompleted);
   localStorage.setItem("longRestsCompleted", longRestsCompleted);
@@ -100,6 +65,7 @@ function resetDailyStats() {
 
 // Function that starts the timer
 function startTimer() {
+  loadSettings();
   if (!timer) {
     timer = setInterval(() => {
       timeRemaining--;
@@ -277,6 +243,12 @@ browser.runtime.onMessage.addListener((message) => {
     pauseTimer();
   } else if (message.action === "resetTimer") {
     resetTimer();
+  } else if (message.action === "setToWorkSession") {
+    workSessionsCompleted--;
+    currentSession = "work";
+    timeRemaining = workTime;
+    browser.browserAction.setBadgeText({ text: "" });
+    browser.browserAction.setBadgeBackgroundColor({ color: "#be003f" });
   }
 });
 

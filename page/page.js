@@ -1,5 +1,5 @@
 document.getElementById("resume").addEventListener("click", () => {
-  const startAutomatically = JSON.parse(localStorage.getItem("startAutomatically")) || false;
+  const startAutomatically = JSON.parse(localStorage.getItem("startAutomatically")) || true;
 
   if (startAutomatically) {
     window.close();
@@ -15,7 +15,7 @@ document.getElementById("stats").addEventListener("click", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const completedPomodoros = localStorage.getItem("pomodorosCompletedToday") || 0;
-  const remainingPomodoros = localStorage.getItem("shortRestsRemaining") || 0;
+  const remainingPomodoros = localStorage.getItem("shortRestsRemaining") || 4;
   const completedPomodorosElement = document.querySelector(".completed-pomodoros");
   const remainingPomodorosElement = document.querySelector(".remaining-pomodoros");
   const resumeButton = document.getElementById("resume1");
